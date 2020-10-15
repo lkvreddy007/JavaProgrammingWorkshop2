@@ -11,8 +11,26 @@ public class HotelReservationTest {
 	@Test
 	public void givendetailsOf3Hotels_WhenAddedToHotelList_SizeOfListIs3(){
 		HotelReservation temp = new HotelReservation();
-		temp.addHotel();
+		Hotel lakeWood=new Hotel("Lakewood",110);
+		Hotel bridgeWood=new Hotel("Bridgewood",160);
+		Hotel ridgeWood=new Hotel("Ridgewood",220);
 		ArrayList<Hotel> list=temp.getHotelList();
-		Assert.assertEquals(1, list.size());
+		list.add(lakeWood);
+		list.add(bridgeWood);
+		list.add(ridgeWood);
+		Assert.assertEquals(3, list.size());
+	}
+	
+	@Test
+	public void givendetailsOf3Hotels_WhenCorrect_ShouldReturnHotelNameWithLowRate() {
+		HotelReservation temp = new HotelReservation();
+		Hotel lakeWood=new Hotel("Lakewood",110);
+		Hotel bridgeWood=new Hotel("Bridgewood",160);
+		Hotel ridgeWood=new Hotel("Ridgewood",220);
+		ArrayList<Hotel> list=temp.getHotelList();
+		list.add(lakeWood);
+		list.add(bridgeWood);
+		list.add(ridgeWood);
+		Assert.assertEquals("LakeWood",temp.findCheapestHotel());
 	}
 }
