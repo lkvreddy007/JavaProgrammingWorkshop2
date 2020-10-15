@@ -7,7 +7,8 @@ public class Hotel {
 	
 	public Hotel(String name, int priceWeekday,int priceWeekend) {
 		this.setName(name);
-		this.setPrice(priceWeekday);
+		this.setPriceWeekday(priceWeekday);
+		this.setPriceWeekend(priceWeekend);
 	}
 	
 	public String getName() {
