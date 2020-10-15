@@ -18,9 +18,11 @@ public class HotelReservation {
 	public static void addHotel(){
 		System.out.println("Enter the name of hotel:");
 		String name = sc.nextLine();
-		System.out.println("Enter the price:");
-		int price = sc.nextInt();
-		Hotel temp = new Hotel(name,price);
+		System.out.println("Enter Weekday price:");
+		int priceWeekday =Integer.parseInt(sc.nextLine());
+		System.out.println("Enter Weekend price:");
+		int priceWeekend=Integer.parseInt(sc.nextLine());
+		Hotel temp = new Hotel(name,priceWeekday,priceWeekend);
 		hotelList.add(temp);
 	}
 	
@@ -45,11 +47,11 @@ public class HotelReservation {
 	    int numDays = (int) (difference / (1000*60*60*24))+1;
 		Hotel cheapestHotel=hotelList.get(0);
 		for(Hotel h:hotelList) {
-			if(h.getPrice()<cheapestHotel.getPrice()) {
+			if(h.getPriceWeekday()<cheapestHotel.getPriceWeekday()) {
 				cheapestHotel=h;
 			}
 		}
-		int price=cheapestHotel.getPrice();
+		int price=cheapestHotel.getPriceWeekday();
 		String hotelName=cheapestHotel.getName();
 		int totalAmt= (int)numDays*price;
 		System.out.println("Cheapest Hotel for the given dates is \n"+hotelName+", Total Rates: $"+totalAmt);
@@ -58,9 +60,9 @@ public class HotelReservation {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		Hotel lakeWood=new Hotel("Lakewood",110);
-		Hotel bridgeWood=new Hotel("Bridgewood",110);
-		Hotel ridgeWood=new Hotel("Ridgewood",110);
+		Hotel lakeWood=new Hotel("Lakewood",110,90);
+		Hotel bridgeWood=new Hotel("Bridgewood",110,50);
+		Hotel ridgeWood=new Hotel("Ridgewood",110,150);
 		hotelList.add(lakeWood);
 		hotelList.add(bridgeWood);
 		hotelList.add(ridgeWood);
