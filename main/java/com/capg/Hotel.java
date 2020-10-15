@@ -2,11 +2,12 @@ package com.capg;
 
 public class Hotel {
 	private String name;
-	private int price;
+	private int priceWeekday;
+	private int priceWeekend;
 	
-	public Hotel(String name, int price) {
+	public Hotel(String name, int priceWeekday,int priceWeekend) {
 		this.setName(name);
-		this.setPrice(price);
+		this.setPrice(priceWeekday);
 	}
 	
 	public String getName() {
@@ -15,15 +16,22 @@ public class Hotel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getPrice() {
-		return price;
+	public int getPriceWeekday() {
+		return priceWeekday;
 	}
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(int priceWeekday) {
+		this.priceWeekday = priceWeekday;
 	}
 	
 	@Override
 	public String toString(){
-		return "Hotel Name: "+name+" Price: "+price;
+		return "Hotel Name: "+name+" Weekday Price: "+priceWeekday+ " WeekendPrice";
+	}
+
+	public int getPriceWeekend() {
+		return priceWeekend;
+	}
+	public void setPriceWeekend(int priceWeekend) {
+		this.priceWeekend = priceWeekend;
 	}
 }
