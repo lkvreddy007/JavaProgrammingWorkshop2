@@ -36,7 +36,7 @@ public class HotelReservation {
 		hotelList.add(temp);
 	}
 	
-	public static int findCheapestHotel() {
+	public static Map<Hotel,Integer> findCheapestHotel() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
 		String temp = sc.nextLine();
@@ -53,17 +53,40 @@ public class HotelReservation {
 		catch (ParseException e) {
 			System.out.println("invalid checkout date");
 		}
-		Map<String,Integer> hotelCost=new HashMap<String,Integer>();
+		Map<Hotel,Integer> hotelCost=new HashMap<Hotel,Integer>();
+		Map<Hotel,Integer> cheapList=new HashMap<Hotel,Integer>();
 		for(Hotel h:hotelList) {
-			hotelCost.put(h.getName(),calcTotal(h));
+			hotelCost.put(h,calcTotal(h));
 		}
 		int low=Collections.min(hotelCost.values());
 		System.out.println("Cheapest Hotel for the given dates is");
 		hotelCost.forEach((k,v)->{
-			if(v==low) {System.out.println(k+", Total Rates: $"+v);}
+			if(v==low) {
+				cheapList.put(k, v);
+				System.out.println(k.getName()+", Total Rates: $"+v);
+			}
 		});
-		return low;
+		return cheapList;
 	}
+	
+	public static Hotel findCheapestBestRatedHotel() {
+		Map<Hotel,Integer>cheapList= findCheapestHotel();
+		ArrayList<Integer> ratingList=new ArrayList<Integer>();
+		ArrayList<Hotel> list=new ArrayList<Hotel>();
+		cheapList.forEach((k,v)->{
+			ratingList.add(k.getRating());
+		});
+		int maxRating=Collections.max(ratingList);
+		cheapList.forEach((k,v)->{
+			if(k.getRating()==maxRating) {
+				list.add(k);
+				System.out.println("Highest Rated Cheap Hotel is: \n"+ k.getName()+", Total Rates: $"+v);
+			}
+		});
+		return list.get(0);
+	}
+	
+	//Map<Map<Hotel,Integer>,Integer>
 	
 	public static int calcTotal(Hotel h) {
 		long difference = checkout.getTime() - checkin.getTime();
@@ -110,6 +133,7 @@ public class HotelReservation {
 		hotelList.add(bridgeWood);
 		hotelList.add(ridgeWood);
 		System.out.println(hotelList);
-		findCheapestHotel();
+		//findCheapestHotel();
+		findCheapestBestRatedHotel();
 	}
 }

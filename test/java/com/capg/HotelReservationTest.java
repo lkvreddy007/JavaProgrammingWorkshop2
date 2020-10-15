@@ -19,7 +19,7 @@ public class HotelReservationTest {
 		list.add(bridgeWood);
 		list.add(ridgeWood);
 		temp.sethotelList(list);
-		int val=temp.findCheapestHotel();
-		Assert.assertEquals(val,200);
+		Hotel val=temp.findCheapestBestRatedHotel();
+		Assert.assertEquals(val.getName(),"Bridgewood");
 	}
 }
