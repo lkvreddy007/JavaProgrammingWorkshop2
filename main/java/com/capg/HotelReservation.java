@@ -86,8 +86,6 @@ public class HotelReservation {
 		return list.get(0);
 	}
 	
-	//Map<Map<Hotel,Integer>,Integer>
-	
 	public static int calcTotal(Hotel h) {
 		long difference = checkout.getTime() - checkin.getTime();
 	    int numDays = (int) (difference / (1000*60*60*24))+1;
@@ -133,7 +131,6 @@ public class HotelReservation {
 		hotelList.add(bridgeWood);
 		hotelList.add(ridgeWood);
 		System.out.println(hotelList);
-		//findCheapestHotel();
 		findCheapestBestRatedHotel();
 	}
 }
