@@ -4,7 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class HotelReservation {
@@ -14,6 +17,10 @@ public class HotelReservation {
 	
 	public ArrayList<Hotel> getHotelList() {
 		return hotelList;
+	}
+	
+	public void sethotelList(ArrayList<Hotel> hotelList) {
+		this.hotelList=hotelList;
 	}
 	
 	public static void addHotel(){
@@ -27,10 +34,10 @@ public class HotelReservation {
 		hotelList.add(temp);
 	}
 	
-	public static String findCheapestHotel() {
+	public static int findCheapestHotel() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
-		String temp = sc.next();
+		String temp = sc.nextLine();
 		String[] dates=temp.split(",");
 		try {
 			checkin = dateFormat.parse(dates[0]);
@@ -44,26 +51,59 @@ public class HotelReservation {
 		catch (ParseException e) {
 			System.out.println("invalid checkout date");
 		}
+		Map<String,Integer> hotelCost=new HashMap<String,Integer>();
+		for(Hotel h:hotelList) {
+			hotelCost.put(h.getName(),calcTotal(h));
+		}
+		int low=Collections.min(hotelCost.values());
+		System.out.println("Cheapest Hotel for the given dates is");
+		hotelCost.forEach((k,v)->{
+			if(v==low) {System.out.println(k+", Total Rates: $"+v);}
+		});
+		return low;
+	}
+	
+	public static int calcTotal(Hotel h) {
 		long difference = checkout.getTime() - checkin.getTime();
 	    int numDays = (int) (difference / (1000*60*60*24))+1;
-		Hotel cheapestHotel=hotelList.get(0);
-		for(Hotel h:hotelList) {
-			if(h.getPriceWeekday()<cheapestHotel.getPriceWeekday()) {
-				cheapestHotel=h;
+		int priceWeekday=h.getPriceWeekday();
+		int priceWeekend=h.getPriceWeekend();
+		int numOfWeekends=getNumOfWeekends(checkin, checkout);
+		int totalAmt= ((int)numDays-numOfWeekends)*priceWeekday+numOfWeekends*priceWeekend;
+		return totalAmt;
+	}
+	
+	public static int getNumOfWeekends(Date start,Date end) {
+		Calendar calStart=Calendar.getInstance();
+		calStart.setTime(start);
+		Calendar calEnd=Calendar.getInstance();
+		calEnd.setTime(end);
+		int count=0;
+		String day="";
+		String[] strDays = new String[]{
+                "Sunday",
+                "Monday", 
+                "Tuesday",
+                "Wednesday",
+                "Thusday",
+                "Friday",
+                "Saturday"
+              };
+		while(calStart.before(calEnd)|| calStart.equals(calEnd)) {
+			day = strDays[calStart.get(Calendar.DAY_OF_WEEK) - 1];
+			if(day.equals("Sunday")||day.equals("Saturday")) {
+				count++;
 			}
+			calStart.add(Calendar.DAY_OF_MONTH, 1);
 		}
-		int price=cheapestHotel.getPriceWeekday();
-		String hotelName=cheapestHotel.getName();
-		int totalAmt= (int)numDays*price;
-		System.out.println("Cheapest Hotel for the given dates is \n"+hotelName+", Total Rates: $"+totalAmt);
-		return hotelName;
+		return count;
 	}
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
 		Hotel lakeWood=new Hotel("Lakewood",110,90);
-		Hotel bridgeWood=new Hotel("Bridgewood",110,50);
-		Hotel ridgeWood=new Hotel("Ridgewood",110,150);
+		Hotel bridgeWood=new Hotel("Bridgewood",150,50);
+		Hotel ridgeWood=new Hotel("Ridgewood",220,150);
 		hotelList.add(lakeWood);
 		hotelList.add(bridgeWood);
 		hotelList.add(ridgeWood);
