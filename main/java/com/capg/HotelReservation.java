@@ -30,7 +30,9 @@ public class HotelReservation {
 		int priceWeekday =Integer.parseInt(sc.nextLine());
 		System.out.println("Enter Weekend price:");
 		int priceWeekend=Integer.parseInt(sc.nextLine());
-		Hotel temp = new Hotel(name,priceWeekday,priceWeekend);
+		System.out.println("Enter Rating:");
+		int rating=Integer.parseInt(sc.nextLine());
+		Hotel temp = new Hotel(name,priceWeekday,priceWeekend,rating);
 		hotelList.add(temp);
 	}
 	
@@ -101,9 +103,9 @@ public class HotelReservation {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		Hotel lakeWood=new Hotel("Lakewood",110,90);
-		Hotel bridgeWood=new Hotel("Bridgewood",150,50);
-		Hotel ridgeWood=new Hotel("Ridgewood",220,150);
+		Hotel lakeWood=new Hotel("Lakewood",110,90,3);
+		Hotel bridgeWood=new Hotel("Bridgewood",150,50,4);
+		Hotel ridgeWood=new Hotel("Ridgewood",220,150,5);
 		hotelList.add(lakeWood);
 		hotelList.add(bridgeWood);
 		hotelList.add(ridgeWood);
