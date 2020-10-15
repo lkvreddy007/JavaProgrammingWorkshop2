@@ -19,7 +19,7 @@ public class Hotel {
 	public int getPriceWeekday() {
 		return priceWeekday;
 	}
-	public void setPrice(int priceWeekday) {
+	public void setPriceWeekday(int priceWeekday) {
 		this.priceWeekday = priceWeekday;
 	}
 	
