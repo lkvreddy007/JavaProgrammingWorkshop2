@@ -36,7 +36,7 @@ public class HotelReservation {
 		hotelList.add(temp);
 	}
 	
-	public static Map<Hotel,Integer> findCheapestHotel() {
+	public static void getDates() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
 		String temp = sc.nextLine();
@@ -53,6 +53,10 @@ public class HotelReservation {
 		catch (ParseException e) {
 			System.out.println("invalid checkout date");
 		}
+	}
+	
+	public static Map<Hotel,Integer> findCheapestHotel() {
+		getDates();
 		Map<Hotel,Integer> hotelCost=new HashMap<Hotel,Integer>();
 		Map<Hotel,Integer> cheapList=new HashMap<Hotel,Integer>();
 		for(Hotel h:hotelList) {
@@ -69,7 +73,7 @@ public class HotelReservation {
 		return cheapList;
 	}
 	
-	public static Hotel findCheapestBestRatedHotel() {
+	public static ArrayList<Hotel> findCheapestBestRatedHotel() {
 		Map<Hotel,Integer>cheapList= findCheapestHotel();
 		ArrayList<Integer> ratingList=new ArrayList<Integer>();
 		ArrayList<Hotel> list=new ArrayList<Hotel>();
@@ -83,7 +87,7 @@ public class HotelReservation {
 				System.out.println("Highest Rated Cheap Hotel is: \n"+ k.getName()+", Total Rates: $"+v);
 			}
 		});
-		return list.get(0);
+		return list;
 	}
 	
 	public static int calcTotal(Hotel h) {
@@ -120,6 +124,38 @@ public class HotelReservation {
 			calStart.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		return count;
+	}
+	
+	public Map<Hotel,Integer> findBestRatedHotel() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
+		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
+		String temp = sc.nextLine();
+		String[] dates=temp.split(",");
+		try {
+			checkin = dateFormat.parse(dates[0]);
+		} 
+		catch (ParseException e) {
+			System.out.println("invalid checkin date");
+		}
+		try {
+			checkout = dateFormat.parse(dates[1]);
+		}
+		catch (ParseException e) {
+			System.out.println("invalid checkout date");
+		}
+		Map<Hotel,Integer> ratingList=new HashMap<Hotel,Integer>() ;
+		Map<Hotel,Integer> highestRatedMap=new HashMap<Hotel,Integer>();
+		for(Hotel h:hotelList) {
+			ratingList.put(h, h.getRating());
+		}
+		int maxRating=Collections.max(ratingList.values());
+		ratingList.forEach((k,v)->{
+			if(v==maxRating) {
+				highestRatedMap.put(k,calcTotal(k));
+				System.out.println("Highest Rated Cheap Hotel is: \n"+ k.getName()+", Total Rates: $"+highestRatedMap.get(k));
+			}
+		});
+		return highestRatedMap;
 	}
 	
 	public static void main(String[] args) {
