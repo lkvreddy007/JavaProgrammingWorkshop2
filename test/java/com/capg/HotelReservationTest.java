@@ -10,9 +10,8 @@ import junit.framework.Assert;
 public class HotelReservationTest {
 	
 	@Test
-	public void givendetailsOf3Hotels_WhenCorrect_ShouldReturnTrue() {
+	public void givendetailsOf3HotelsForRewardCustomer_WhenCorrect_ShouldReturnTrue() throws InvalidInputException {
 		HotelReservation hotelResv=new HotelReservation();
-		hotelResv.getPrices();
 		ArrayList<Hotel> val=hotelResv.findCheapestBestRatedHotel();
 		Assert.assertEquals(hotelResv.calcTotal(val.get(0)),140);
 	}

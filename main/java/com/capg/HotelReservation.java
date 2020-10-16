@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class HotelReservation {
 	private static Scanner sc = new Scanner(System.in);	
@@ -36,32 +39,45 @@ public class HotelReservation {
 		hotelList.add(temp);
 	}
 	
-	public static void getDates() {
+	public static void setDates() throws InvalidInputException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
 		String temp = sc.nextLine();
 		String[] dates=temp.split(",");
-		try {
-			checkin = dateFormat.parse(dates[0]);
-		} 
-		catch (ParseException e) {
-			System.out.println("invalid checkin date");
+		Pattern pattern = Pattern.compile("[0-9]{2}[A-Z][a-z]{2}[0-9]{4}");
+		Matcher matcher1=pattern.matcher(dates[0]);
+		Matcher matcher2=pattern.matcher(dates[1]);
+		if(matcher1.matches()) {
+			try {
+				checkin = dateFormat.parse(dates[0]);
+			} 
+			catch (ParseException e) {
+				System.out.println("Cannot Parse Checkin Date");
+			}
+		}	
+		else {
+			throw new InvalidInputException("Invalid Checkin Date");
 		}
-		try {
-			checkout = dateFormat.parse(dates[1]);
+		if(matcher2.matches()) {
+			try {
+				checkout = dateFormat.parse(dates[1]);
+			}
+			catch (ParseException e) {
+				System.out.println("Cannot Parse Checkout Date");
+			}
 		}
-		catch (ParseException e) {
-			System.out.println("invalid checkout date");
+		else {
+			throw new InvalidInputException("Invalid Checkout Date");
 		}
 	}
 	
-	public static Map<Hotel,Integer> findCheapestHotel() {
-		getDates();
+	public static Map<Hotel,Integer> findCheapestHotel() throws InvalidInputException {
+		setPrices();
+		System.out.println(hotelList);
+		setDates();
 		Map<Hotel,Integer> hotelCost=new HashMap<Hotel,Integer>();
 		Map<Hotel,Integer> cheapList=new HashMap<Hotel,Integer>();
-		for(Hotel h:hotelList) {
-			hotelCost.put(h,calcTotal(h));
-		}
+		hotelCost = hotelList.stream().collect(Collectors.toMap(h->h, h->calcTotal(h)));
 		int low=Collections.min(hotelCost.values());
 		System.out.println("Cheapest Hotel for the given dates is");
 		hotelCost.forEach((k,v)->{
@@ -73,7 +89,7 @@ public class HotelReservation {
 		return cheapList;
 	}
 	
-	public static ArrayList<Hotel> findCheapestBestRatedHotel() {
+	public static ArrayList<Hotel> findCheapestBestRatedHotel() throws InvalidInputException {
 		Map<Hotel,Integer>cheapList= findCheapestHotel();
 		ArrayList<Integer> ratingList=new ArrayList<Integer>();
 		ArrayList<Hotel> list=new ArrayList<Hotel>();
@@ -84,9 +100,11 @@ public class HotelReservation {
 		cheapList.forEach((k,v)->{
 			if(k.getRating()==maxRating) {
 				list.add(k);
-				System.out.println("Highest Rated Cheap Hotel is: \n"+ k.getName()+", Total Rates: $"+v);
 			}
 		});
+		list.stream().forEach
+        (k-> System.out.println("Highest Rated Hotel is: \n"+k.getName()+", Total Rates: $"+calcTotal(k)));
+		
 		return list;
 	}
 	
@@ -126,39 +144,26 @@ public class HotelReservation {
 		return count;
 	}
 	
-	public static Map<Hotel,Integer> findBestRatedHotel() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
-		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
-		String temp = sc.nextLine();
-		String[] dates=temp.split(",");
-		try {
-			checkin = dateFormat.parse(dates[0]);
-		} 
-		catch (ParseException e) {
-			System.out.println("invalid checkin date");
-		}
-		try {
-			checkout = dateFormat.parse(dates[1]);
-		}
-		catch (ParseException e) {
-			System.out.println("invalid checkout date");
-		}
-		Map<Hotel,Integer> ratingList=new HashMap<Hotel,Integer>() ;
+	public static Map<Hotel,Integer> findBestRatedHotel() throws InvalidInputException {
+		setPrices();
+		System.out.println(hotelList);
+		setDates();
+		Map<Hotel,Integer> ratingMap=new HashMap<Hotel,Integer>() ;
 		Map<Hotel,Integer> highestRatedMap=new HashMap<Hotel,Integer>();
-		for(Hotel h:hotelList) {
-			ratingList.put(h, h.getRating());
-		}
-		int maxRating=Collections.max(ratingList.values());
-		ratingList.forEach((k,v)->{
+		ratingMap=hotelList.stream().collect(Collectors.toMap(h->h, h->h.getRating()));
+		int maxRating=Collections.max(ratingMap.values());
+		ratingMap.forEach((k,v)->{
 			if(v==maxRating) {
 				highestRatedMap.put(k,calcTotal(k));
-				System.out.println("Highest Rated Cheap Hotel is: \n"+ k.getName()+", Total Rates: $"+highestRatedMap.get(k));
 			}
 		});
+		highestRatedMap.entrySet().stream().forEach
+         (k-> System.out.println("Highest Rated Hotel is: \n"+k.getKey().getName()+", Total Rates: $"+k.getValue()));
+		 
 		return highestRatedMap;
 	}
 	
-	public static void getPrices() {
+	public static void setPrices() {
 		System.out.println("Enter 1 for regular Customer and 2 for Reward Customer");
 		int choice=Integer.parseInt(sc.nextLine());
 		if(choice==1) {
@@ -169,7 +174,7 @@ public class HotelReservation {
 			hotelList.add(bridgeWood);
 			hotelList.add(ridgeWood);
 		}
-		if(choice==2) {
+		else if(choice==2) {
 			Hotel lakeWood=new Hotel("Lakewood",80,80,3);
 			Hotel bridgeWood=new Hotel("Bridgewood",110,50,4);
 			Hotel ridgeWood=new Hotel("Ridgewood",100,40,5);
@@ -177,12 +182,18 @@ public class HotelReservation {
 			hotelList.add(bridgeWood);
 			hotelList.add(ridgeWood);
 		}
+		else {
+			System.out.println("Invalid Input try again");
+			setPrices();
+		}
 	}
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		getPrices();
-		System.out.println(hotelList);
-		findCheapestBestRatedHotel();
+		try {
+			findBestRatedHotel();
+		} catch (InvalidInputException e) {
+			System.out.println(e);
+		}
 	}
 }
