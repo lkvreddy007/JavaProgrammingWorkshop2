@@ -126,7 +126,7 @@ public class HotelReservation {
 		return count;
 	}
 	
-	public Map<Hotel,Integer> findBestRatedHotel() {
+	public static Map<Hotel,Integer> findBestRatedHotel() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		System.out.println("Check-In date(ddMMMyyyy),Check-Out date(ddMMMyyyy):");
 		String temp = sc.nextLine();
@@ -158,14 +158,30 @@ public class HotelReservation {
 		return highestRatedMap;
 	}
 	
+	public static void getPrices() {
+		System.out.println("Enter 1 for regular Customer and 2 for Reward Customer");
+		int choice=Integer.parseInt(sc.nextLine());
+		if(choice==1) {
+			Hotel lakeWood=new Hotel("Lakewood",110,90,3);
+			Hotel bridgeWood=new Hotel("Bridgewood",150,50,4);
+			Hotel ridgeWood=new Hotel("Ridgewood",220,150,5);
+			hotelList.add(lakeWood);
+			hotelList.add(bridgeWood);
+			hotelList.add(ridgeWood);
+		}
+		if(choice==2) {
+			Hotel lakeWood=new Hotel("Lakewood",80,80,3);
+			Hotel bridgeWood=new Hotel("Bridgewood",110,50,4);
+			Hotel ridgeWood=new Hotel("Ridgewood",100,40,5);
+			hotelList.add(lakeWood);
+			hotelList.add(bridgeWood);
+			hotelList.add(ridgeWood);
+		}
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		Hotel lakeWood=new Hotel("Lakewood",110,90,3);
-		Hotel bridgeWood=new Hotel("Bridgewood",150,50,4);
-		Hotel ridgeWood=new Hotel("Ridgewood",220,150,5);
-		hotelList.add(lakeWood);
-		hotelList.add(bridgeWood);
-		hotelList.add(ridgeWood);
+		getPrices();
 		System.out.println(hotelList);
 		findCheapestBestRatedHotel();
 	}
