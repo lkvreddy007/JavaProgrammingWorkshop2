@@ -10,17 +10,11 @@ import junit.framework.Assert;
 public class HotelReservationTest {
 	
 	@Test
-	public void givendetailsOf3Hotels_WhenCorrect_ShouldReturnHotelNameWithHighestRating() {
-		HotelReservation temp = new HotelReservation();
-		Hotel lakeWood=new Hotel("Lakewood",110,90,3);
-		Hotel bridgeWood=new Hotel("Bridgewood",150,50,4);
-		Hotel ridgeWood=new Hotel("Ridgewood",220,150,5);
-		ArrayList<Hotel> list=temp.getHotelList();
-		list.add(lakeWood);
-		list.add(bridgeWood);
-		list.add(ridgeWood);
-		temp.sethotelList(list);
-		Map<Hotel,Integer> val=temp.findBestRatedHotel();
-		Assert.assertEquals(val.keySet().stream().findFirst().get().getName(),"Ridgewood");
+	public void givendetailsOf3Hotels_WhenCorrect_ShouldReturnTrue() {
+		HotelReservation hotelResv=new HotelReservation();
+		hotelResv.getPrices();
+		ArrayList<Hotel> val=hotelResv.getHotelList();
+		//Asserting Weekday Price of Reward for Lakewood Hotel
+		Assert.assertEquals(val.get(0).getPriceWeekday(),80);
 	}
 }
