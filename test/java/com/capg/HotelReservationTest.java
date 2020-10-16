@@ -13,8 +13,7 @@ public class HotelReservationTest {
 	public void givendetailsOf3Hotels_WhenCorrect_ShouldReturnTrue() {
 		HotelReservation hotelResv=new HotelReservation();
 		hotelResv.getPrices();
-		ArrayList<Hotel> val=hotelResv.getHotelList();
-		//Asserting Weekday Price of Reward for Lakewood Hotel
-		Assert.assertEquals(val.get(0).getPriceWeekday(),80);
+		ArrayList<Hotel> val=hotelResv.findCheapestBestRatedHotel();
+		Assert.assertEquals(hotelResv.calcTotal(val.get(0)),140);
 	}
 }
