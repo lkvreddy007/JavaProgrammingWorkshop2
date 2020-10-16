@@ -103,7 +103,7 @@ public class HotelReservation {
 			}
 		});
 		list.stream().forEach
-        (k-> System.out.println("Highest Rated Hotel is: \n"+k.getName()+", Total Rates: $"+calcTotal(k)));
+        (k-> System.out.println("Cheapest Best Rated Hotel is: \n"+k.getName()+", Total Rates: $"+calcTotal(k)));
 		
 		return list;
 	}
