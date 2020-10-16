@@ -13,6 +13,6 @@ public class HotelReservationTest {
 	public void givendetailsOf3HotelsForRegularCustomer_WhenCorrect_ShouldReturnTrue() throws InvalidInputException {
 		HotelReservation hotelResv=new HotelReservation();
 		ArrayList<Hotel> val=hotelResv.findCheapestBestRatedHotel();
-		Assert.assertEquals(hotelResv.calcTotal(val.get(0)),140);
+		Assert.assertEquals(hotelResv.calcTotal(val.get(0)),200);
 	}
 }
